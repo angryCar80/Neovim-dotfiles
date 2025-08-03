@@ -11,6 +11,8 @@ return {
 }
 
 }
+
+
 --the vscode theme
 --"Mofiqul/vscode.nvim",
   --lazy = false,
