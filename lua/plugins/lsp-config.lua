@@ -54,11 +54,11 @@ return {
           },
         },
       })
-      -- Go LSP
+      -- 🐹 Go LSP
       lspconfig.gopls.setup({
         capabilities = capabilities,
       })
-      -- Java LSP
+      -- ☕ Java LSP
       lspconfig.jdtls.setup({
         capabilities = capabilities,
       })
