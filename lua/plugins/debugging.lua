@@ -1,4 +1,31 @@
 return {
+  -- LSP Configuration
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
+    config = function()
+      require("mason").setup()
+      require("mason-lspconfig").setup({
+        ensure_installed = { "lua_ls", "clangd", "rust_analyzer" },
+        automatic_installation = true,
+      })
+
+      local lspconfig = require("lspconfig")
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+      local servers = { "lua_ls", "clangd", "rust_analyzer" }
+      for _, lsp in ipairs(servers) do
+        lspconfig[lsp].setup {
+          capabilities = capabilities,
+        }
+      end
+    end,
+  },
+
+  -- DAP (Debug Adapter Protocol) Configuration
   {
     "mfussenegger/nvim-dap",
     dependencies = {
@@ -29,9 +56,11 @@ return {
       dap.listeners.before.event_exited.dapui_config = function()
         dapui.close()
       end
+
       vim.keymap.set("n", "<Leader>dt", dap.toggle_breakpoint, {})
       vim.keymap.set("n", "<Leader>dc", dap.continue, {})
-      -- Setup C, C++, Rust (via codelldb)
+
+      -- Setup C, C++, Rust debugging using codelldb
       dap.adapters.codelldb = {
         type = "server",
         port = "${port}",
@@ -56,5 +85,6 @@ return {
         }
       end
     end,
-  }
+  },
 }
+
