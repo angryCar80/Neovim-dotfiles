@@ -1,26 +1,20 @@
 return {
-  {
-  "Shatur/neovim-ayu",
+  "nyoom-engineering/oxocarbon.nvim",
   priority = 1000,
   config = function()
-    require("ayu").setup({
-      mirage = false, -- set to true for "mirage"
-    })
-    vim.cmd("colorscheme ayu-dark")
+    vim.cmd("colorscheme oxocarbon")
   end
-}
-
 }
 
 
 --the vscode theme
 --"Mofiqul/vscode.nvim",
-  --lazy = false,
-  --priority = 1000,
-  --config = function()
-    --require("vscode").setup({
-      --transparent = false,
-      --italic_comments = true,
-    --})
-    --vim.cmd("colorscheme vscode")
-  --end,
+--lazy = false,
+--priority = 1000,
+--config = function()
+--require("vscode").setup({
+--transparent = false,
+--italic_comments = true,
+--})
+--vim.cmd("colorscheme vscode")
+--end,
