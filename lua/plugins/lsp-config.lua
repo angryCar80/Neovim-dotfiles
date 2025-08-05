@@ -1,5 +1,3 @@
--- 🔌 DAP (Debugger) Setup
--- 🧠 LSP Configuration
 return {
   {
     "neovim/nvim-lspconfig",
