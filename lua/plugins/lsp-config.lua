@@ -1,73 +1,83 @@
 return {
+  -- 🧱 Mason (LSP installer)
   {
-    "neovim/nvim-lspconfig",
+    "williamboman/mason.nvim",
+    build = ":MasonUpdate",
     config = function()
-      local lspconfig = require("lspconfig")
+      require("mason").setup()
+    end,
+  },
 
-      -- 💡 Setup basic servers
-      local servers = {
-        "lua_ls",
-        "pyright",
-        "clangd",
-        "ts_ls",
-        "rust_analyzer",
-        "gopls",
-      }
-
-      for _, server in ipairs(servers) do
-        lspconfig[server].setup({})
-      end
-
-      -- 🔧 Custom settings for Lua
-      lspconfig.lua_ls.setup({
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
-          },
-        },
-      })
-
-      -- 🗝️ Keybindings for LSP
-      vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(args)
-          local bufnr = args.buf
-          local opts = { buffer = bufnr }
-          local keymap = vim.keymap.set
-
-          keymap("n", "gd", vim.lsp.buf.definition, opts)
-          keymap("n", "K", vim.lsp.buf.hover, opts)
-          keymap("n", "<leader>rn", vim.lsp.buf.rename, opts)
-          keymap("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-          keymap("n", "gr", vim.lsp.buf.references, opts)
-          keymap("n", "<leader>f", function()
-            vim.lsp.buf.format({ async = true })
-          end, opts)
-        end,
+  -- 🔧 Mason-LSPConfig (bridge between mason & lspconfig)
+  {
+    "williamboman/mason-lspconfig.nvim",
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "lua_ls",
+          "clangd",
+          "rust_analyzer",
+          "pyright",
+          "gopls",
+          "jdtls",
+        }
       })
     end,
   },
 
-  -- 🛠️ Mason for managing LSP servers
+  -- 🔌 Native LSP config
   {
-    "williamboman/mason.nvim",
-    build = ":MasonUpdate",
-    opts = {},
-  },
+    "neovim/nvim-lspconfig",
+    config = function()
+      local lspconfig = require("lspconfig")
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-  {
-    "williamboman/mason-lspconfig.nvim",
-    opts = {
-      ensure_installed = {
-        "lua_ls",
-        "pyright",
-        "clangd",
-        "ts_ls",
-        "rust_analyzer",
-        "gopls",
-      },
-    },
+      -- 🧠 Lua LSP
+      lspconfig.lua_ls.setup({
+        capabilities = capabilities,
+      })
+
+      -- 💻 C/C++ LSP
+      lspconfig.clangd.setup({
+        capabilities = capabilities,
+      })
+
+      -- 🦀 Rust LSP
+      lspconfig.rust_analyzer.setup({
+        capabilities = capabilities,
+        settings = {
+          ["rust-analyzer"] = {
+            checkOnSave = {
+              command = "clippy",
+            },
+            cargo = {
+              allFeatures = true,
+            },
+          },
+        },
+      })
+      -- 🐹 Go LSP
+      lspconfig.gopls.setup({
+        capabilities = capabilities,
+      })
+      -- ☕ Java LSP
+      lspconfig.jdtls.setup({
+        capabilities = capabilities,
+      })
+      -- 🔍 Useful keymaps
+      vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover docs" })
+      vim.keymap.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
+      vim.keymap.set({ "n", "v" }, "<leader>cq", vim.lsp.buf.code_action, { desc = "Code action" })
+
+      -- 💬 Auto popup diagnostics
+      vim.api.nvim_create_autocmd("CursorHold", {
+        callback = function()
+          vim.diagnostic.open_float(nil, { focusable = false, border = "rounded" })
+        end,
+      })
+
+      -- Optional: faster CursorHold delay
+      vim.o.updatetime = 300
+    end,
   },
 }
-
