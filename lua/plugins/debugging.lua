@@ -1,5 +1,5 @@
 return {
-  -- LSP Configuration
+  -- LSP for C/C++
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -9,78 +9,63 @@ return {
     config = function()
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "clangd", "rust_analyzer" },
-        automatic_installation = true,
+        ensure_installed = { "clangd" },
       })
 
       local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      local servers = { "lua_ls", "clangd", "rust_analyzer" }
-      for _, lsp in ipairs(servers) do
-        lspconfig[lsp].setup {
-          capabilities = capabilities,
-        }
-      end
+      lspconfig.clangd.setup({
+        capabilities = capabilities,
+      })
     end,
   },
 
-  -- DAP (Debug Adapter Protocol) Configuration
+  -- DAP with LLDB
   {
     "mfussenegger/nvim-dap",
     dependencies = {
       "rcarriga/nvim-dap-ui",
-      "leoluz/nvim-dap-go",
       "nvim-neotest/nvim-nio",
-      "williamboman/mason.nvim",
-      opts = {
-        ensure_installed = { "codelldb" },
-      },
     },
     config = function()
       local dap = require("dap")
       local dapui = require("dapui")
 
-      require("dap-go").setup()
       dapui.setup()
 
-      dap.listeners.before.attach.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.launch.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config = function()
-        dapui.close()
-      end
+      dap.listeners.before.attach.dapui_config = function() dapui.open() end
+      dap.listeners.before.launch.dapui_config = function() dapui.open() end
+      dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
+      dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
 
-      vim.keymap.set("n", "<Leader>dt", dap.toggle_breakpoint, {})
+      -- Keymaps for debugging
+      vim.keymap.set("n", "<Leader>db", dap.toggle_breakpoint, {})
       vim.keymap.set("n", "<Leader>dc", dap.continue, {})
+      vim.keymap.set("n", "<Leader>do", dap.step_over, {})
+      vim.keymap.set("n", "<Leader>di", dap.step_into, {})
+      vim.keymap.set("n", "<Leader>du", dap.step_out, {})
 
-      -- Setup C, C++, Rust debugging using codelldb
-      dap.adapters.codelldb = {
-        type = "server",
-        port = "${port}",
-        executable = {
-          command = vim.fn.stdpath("data") .. "/mason/bin/codelldb",
-          args = { "--port", "${port}" },
-        },
+      -- LLDB Adapter (Linux)
+      dap.adapters.lldb = {
+        type = "executable",
+        command = "/usr/bin/lldb", -- make sure this exists
+        name = "lldb",
       }
 
-      for _, lang in ipairs({ "c", "cpp", "rust" }) do
+      -- Config for C/C++
+      for _, lang in ipairs({ "c", "cpp" }) do
         dap.configurations[lang] = {
           {
-            name = "Launch file",
-            type = "codelldb",
+            name = "Launch LLDB",
+            type = "lldb",
             request = "launch",
             program = function()
               return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
             end,
             cwd = "${workspaceFolder}",
-            stopOnEntry = false,
+            stopOnEntry = true,
+            args = {},
           },
         }
       end

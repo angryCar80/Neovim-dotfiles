@@ -20,6 +20,7 @@ return {
           "pyright",
           "gopls",
           "jdtls",
+          "zls"
         }
       })
     end,
@@ -62,6 +63,10 @@ return {
       })
       -- ☕ Java LSP
       lspconfig.jdtls.setup({
+        capabilities = capabilities,
+      })
+      -- Zig LSP
+      lspconfig.zls.setup({
         capabilities = capabilities,
       })
       -- 🔍 Useful keymaps
