@@ -121,4 +121,4 @@ nvim
 
 ## License
 
-MIT
+[MIT](LICENSE)
