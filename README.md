@@ -1,138 +1,124 @@
-🧠 My Neovim Config
+# Neovim Config
 
-A fast, minimal Neovim setup focused on dark themes, a smooth workflow, and built-in support for LSP, debugging, and navigation tools.
+A blazing fast, minimalist Neovim configuration built for developers who love dark themes and smooth workflows.
 
-✨ Features
+![Neovim](https://img.shields.io/badge/Neovim-0.9+-57a143?style=flat&logo=neovim)
+![License](https://img.shields.io/github/license/angrycar/Neovim-dotfiles)
 
-🌑 Dark Themes (with UI theme switcher)
+## Features
 
-⚡ Lazy.nvim plugin manager
+### Themes
+Beautiful dark themes built-in with instant switching:
+- **Catppuccin** (Mocha)
+- **Tokyo Night**
+- **Gruvbox**
+- **Rose Pine**
+- **Kanagawa**
+- **Nord**
+- **VSCode Dark+**
 
-🧠 LSP support with Mason + lspconfig
+Press `<leader>th` to cycle through themes. Your choice is saved automatically.
 
-🔞 DAP (debugging) for C, C++, Rust, Go
+### Development Tools
 
-🔭 Telescope for fuzzy finding
+| Feature | Plugin | Description |
+|---------|--------|-------------|
+| LSP | `mason.nvim` + `lspconfig` | Language server support for 15+ languages |
+| Completion | `nvim-cmp` | Fast autocomplete with LSP, snippets, buffer |
+| Debugging | `nvim-dap` | Debug C, C++, Rust, Zig with LLDB |
+| Search | `telescope.nvim` | Fuzzy file finding, grep, and more |
+| Navigation | `harpoon` | Quick file jumping with visual markers |
+| Git | `gitsigns` | Inline git diffs and hunks |
+| Snippets | `LuaSnip` | Fast snippet engine |
 
-🪝 Harpoon 2 for quick file navigation
+### Supported Languages
+- Lua, C/C++, Rust, Go, Java, Python
+- Zig, Dart, Odin
 
-📀 Auto-save selected theme across restarts
+## Keybindings
 
-🔌 Plugins
+### General
+| Key | Action |
+|-----|--------|
+| `<leader>e` | Open Netrw file explorer |
+| `<Ctrl-h/j/k/l>` | Navigate Tmux panes |
 
-UI & Themes
+### Telescope
+| Key | Action |
+|-----|--------|
+| `<leader>f` | Find files |
+| `<leader>sg` | Grep search |
 
-catppuccin
+### LSP
+| Key | Action |
+|-----|--------|
+| `K` | Hover documentation |
+| `gD` | Go to definition |
+| `<leader>cq` | Code action |
 
-tokyonight
+### Debugging
+| Key | Action |
+|-----|--------|
+| `<leader>db` | Toggle breakpoint |
+| `<leader>dc` | Continue / Start |
+| `<leader>do` | Step over |
+| `<leader>di` | Step into |
+| `<leader>du` | Step out |
 
-gruvbox
+### Harpoon
+| Key | Action |
+|-----|--------|
+| `<leader>a` | Add file to harpoon |
+| `<leader>1-3` | Jump to harpooned file |
 
-kanagawa
+## Requirements
 
-onedark
+- **Neovim** 0.9 or higher
+- **Nerd Font** (for icons)
+- **Ripgrep** (for Telescope)
+- **Tmux** (optional, for pane navigation)
 
-rose-pine
+## Installation
 
-oxocarbon
+```bash
+# Clone the repository
+git clone https://github.com/angrycar/Neovim-dotfiles ~/.config/nvim
 
-nord
-
-vscode
-
-...and more
-
-↺ Switch themes with <leader>th
-
-Core Tools
-
-Feature
-
-Plugin
-
-Plugin manager
-
-lazy.nvim
-
-File finder
-
-nvim-telescope/telescope.nvim
-
-Navigation
-
-ThePrimeagen/harpoon (v2)
-
-Theme UI
-
-stevearc/dressing.nvim
-
-LSP
-
-neovim/nvim-lspconfig
-
-williamboman/mason.nvim
-
-mason-lspconfig.nvim
-
-Preinstalled: lua_ls, clangd, rust_analyzer
-
-DAP (Debugging)
-
-mfussenegger/nvim-dap
-
-rcarriga/nvim-dap-ui
-
-leoluz/nvim-dap-go
-
-Keymaps:
-
-<leader>dt: Toggle breakpoint
-
-<leader>dc: Start / continue debug
-
-🛠 Requirements
-
-Neovim ≥ 0.9
-
-A Nerd Font
-
-ripgrep (for Telescope)
-
-fd, bat (optional)
-
-📁 Folder Structure
-
-~/.config/nvim/
-├── init.lua
-├── lua/
-│   ├── plugins/
-│   │   ├─ theme_switcher.lua
-│   │   ├─ lsp_dap.lua
-│   │   ├─ telescope.lua
-│   │   └─ harpoon.lua
-
-🧘 Usage Tips
-
-Use <leader>th to open the theme picker.
-
-Use <leader>f to find files with Telescope.
-
-Use Harpoon for jumping between files with custom keymaps.
-
-LSP and DAP configs are auto-installed via Mason.
-
-📦 Setup
-
-git clone https://github.com/yourusername/nvim-config ~/.config/nvim
+# Start Neovim (plugins will install automatically)
 nvim
+```
 
-🗒 Notes
+## Structure
 
-Themes persist across sessions.
+```
+~/.config/nvim/
+├── init.lua                 # Entry point
+├── lua/
+│   ├── config/
+│   │   ├── themes.lua       # Theme switcher
+│   │   ├── buffers.lua     # Buffer management
+│   │   └── zig.lua         # Zig-specific config
+│   └── plugins/
+│       ├── themes.lua      # Theme plugins
+│       ├── lsp-config.lua  # LSP setup
+│       ├── debugging.lua   # DAP config
+│       ├── telescope.lua   # Fuzzy finder
+│       ├── harpoon.lua     # File navigation
+│       └── ...
+└── lazy-lock.json
+```
 
-Designed for dark environments only.
+## Notes
 
-Easy to extend with more plugins or personal keymaps.
+- Themes persist across sessions via auto-save
+- All LSP servers auto-install via Mason on first use
+- Optimized for dark environments
+- Inspired by LazyVim but lighter
 
-📸 Preview
-* not now am sorry guys
+## Screenshot
+
+*Coming soon*
+
+## License
+
+MIT
