@@ -1,27 +1,21 @@
 return {
-  "rose-pine/neovim",
-  lazy = false,
-  priority = 1000,
+  "catppuccin/nvim",
+  name = "catppuccin",
+  priority = 1000, -- ensures the colorscheme loads early to prevent flashing
+  opts = {
+    -- Configuration options go here (optional)
+    flavour = "mocha",              -- latte, frappe, macchiato, or mocha (default)
+    transparent_background = false, -- disables setting the background color
+    integrations = {
+      -- automatically detect and enable integrations for other plugins
+      auto_integrations = true,
+      -- explicitly enable specific integrations as needed, e.g.,
+      -- cmp = true,
+      -- gitsigns = true,
+      -- nvimtree = true,
+    },
+  },
   config = function()
-    require("rose-pine").setup({
-      disable_background = true,  -- Enables transparency
-      dark_variant = "main",      -- Optional: choose your preferred variant
-      bold_vert_split = false,
-      dim_nc_background = true,
-      disable_float_background = true,
-      highlight_groups = {
-        CursorLine = { bg = "none" },
-        CursorColumn = { bg = "none" },
-      },
-    })
-
-    vim.cmd("colorscheme rose-pine")
-
-    -- Force transparent background for key UI elements
-    local groups = { "Normal", "NormalFloat", "SignColumn", "LineNr", "EndOfBuffer" }
-    for _, hl in ipairs(groups) do
-      vim.api.nvim_set_hl(0, hl, { bg = "none" })
-    end
-  end,
+    vim.cmd.colorscheme "catppuccin"
+  end
 }
-

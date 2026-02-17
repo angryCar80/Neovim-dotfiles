@@ -20,7 +20,9 @@ return {
           "pyright",
           "gopls",
           "jdtls",
-          "zls"
+          "zls",
+          "ols",
+          -- "c3-lsp",
         }
       })
     end,
@@ -43,6 +45,8 @@ return {
         capabilities = capabilities,
       })
 
+
+
       -- 🦀 Rust LSP
       lspconfig.rust_analyzer.setup({
         capabilities = capabilities,
@@ -64,11 +68,59 @@ return {
       -- ☕ Java LSP
       lspconfig.jdtls.setup({
         capabilities = capabilities,
+        cmd = {
+          "jdtls",
+          "--java-executable",
+          vim.fn.exepath("java"),
+        },
+        root_dir = lspconfig.util.root_pattern("pom.xml", "build.gradle", ".git", "mvnw", "gradlew"),
+        single_file_support = true,
+        init_options = {
+          jvm_args = {},
+          workspace = vim.fn.stdpath("cache") .. "/jdtls/workspace",
+        },
+        settings = {
+          java = {
+            signatureHelp = { enabled = true },
+            contentProvider = { preferred = "fernflower" },
+            completion = {
+              favoriteStaticMembers = {
+                "org.junit.Assert.*",
+                "org.junit.Assume.*",
+                "org.junit.jupiter.api.Assertions.*",
+                "org.junit.jupiter.api.Assumptions.*",
+                "org.junit.jupiter.api.DynamicContainer.*",
+                "org.junit.jupiter.api.DynamicTest.*",
+              },
+            },
+            sources = {
+              organizeImports = {
+                starThreshold = 9999,
+                staticStarThreshold = 9999,
+              },
+            },
+            format = {
+              enabled = true,
+            },
+          },
+        },
       })
       -- Zig LSP
       lspconfig.zls.setup({
         capabilities = capabilities,
       })
+      -- 🎯 Dart LSP
+      lspconfig.dartls.setup({
+        capabilities = capabilities,
+      })
+      -- 🐦 Odin LSP
+      lspconfig.ols.setup({
+        capabilities = capabilities,
+      })
+      -- 🔷 C3 LSP
+      -- lspconfig.c3_lsp.setup({
+      --   capabilities = capabilities,
+      -- })
       -- 🔍 Useful keymaps
       vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover docs" })
       vim.keymap.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
